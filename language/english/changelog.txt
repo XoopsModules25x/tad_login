@@ -1,3 +1,103 @@
+Tad Login 5.0 (Released on 2020-12-01)
+================================================
+1. Binding Password Manager to add keyword search.
+2. Add the preference of "whether to navigate to the binding screen after login".
+3. Add auto-correction of binding password failure.
+4. Add a blank check for binding password to avoid using a blank as a password, which may lead to failure to login.
+
+Tad Login 4.9 (Released on 2020-11-19)
+================================================
+1. Support Line Login
+
+Tad Login 4.8 (Released on 2020-11-10)
+================================================
+1.Support XOOPS 2.5.11.
+2. Integration of adaptive templates.
+3.Add XOOPS account binding function for OpenID accounts.
+4.Add backstage unified binding management function.
+
+Tad Login 4.7 (2020-03-25 released)
+1.Remove OpenID login for Hsinchu County
+
+Tad Login 4.6 (2020-03-21 released)
+====================================================
+1. Change Pingtung County and Yunlin County back to http: //
+2. Modify Google and Facebook login application instructions
+
+Tad Login 4.5.9 (2020-03-14 released)
+====================================================
+1.Fixed the problem that the identity of students who have not emailed with OIDC will be judged incorrectly
+2. corrected for 2.0 AA accessibility standards
+
+Tad Login 4.5.8 (2020-01-10 released)
+====================================================
+1. Change all OpenID URLs to https
+
+
+Tad Login 4.5.7 (2019-08-04 released)
+=========================================================
+1. Move the login settings of the navigation bar to tad_themes
+
+Tad Login 4.5.6 (2019-05-28 released)
+=========================================================
+1. Fix the problem that the page will be blank in some cases
+
+
+Tad Login 4.5.5 (2019-05-10 released)
+=========================================================
+1. Join OIDC login in each county and city
+2. Automatically correct the login suffix of Kaohsiung City and Taoyuan City
+3. Fixed the problem that the single sign-in service in Taipei cannot be used.
+4. Use the namespace mechanism to avoid function conflicts
+5. Support XOOPS 2.5.10
+
+
+Tad Login 4.5.4 (2019-02-11 released)
+================================================
+1. Fix education cloud login problem
+2. Modify the location of Miaoli County login
+3. Fixed an account that was too long and caused duplicate account issues.
+
+Tad Login 4.5.3 (2019-02-11 released)
+=========================================================
+  1. Fixed the problem that New Taipei City could not log in from the block
+
+Tad Login 4.5.2 (2019-01-08 released)
+================================================
+1. Add Taipei City Government Education Bureau Education Cloud Login
+2. Add Taoyuan City Government Education Bureau Education Cloud Login
+
+
+Tad Login 4.5.1 (2019-01-01 released)
+================================================
+ 1. Support BootStrap4
+ 2. Modify Taipei OpenID login URL
+ 3. Support PHP 7.3
+ 4. Support MySQL database strict mode
+
+
+Tad Login 4.5 (2018-09-13 released)
+=========================================================
+  1. Added Ministry of Education Education Cloud Account Login
+  2. Remove the Big5 Chinese language family
+
+
+Tad Login 4.4.4 (2018-03-28 released)
+================================================
+  1. Fixed an issue where Google couldn't return to the home page when logging in.
+  2. Upgrade Facebook SDK to 5.6.2
+  3. Support PHP 7.2
+  4. Correction of language problems
+  5. Automatic group setting supports universal characters (Email mode)
+  6. Automatic group settings support blank school code, only to determine identity (school code mode)
+
+
+Tad Login 4.4.3 (2017-03-14 released)
+================================================
+ 1.Fixed an issue where Kaohsiung students could not use OpenID login.
+
+
+
 Tad Login 4.4.2 (2017-02-06 released)
 ================================================
 1. Add custom URL settings after signing in
@@ -161,6 +261,7 @@ Tad Login 2.4 (2014-03-04 released)
 1. Compact randStr () function, direct access tadtools in randStr ()
 2. Fixed Chiayi County Auto Group Setting OpenID login issues will not move
 3. Add Tainan OpenID student identification function (also modify group settings interface automatically in the background)
+
 
 Tad Login 2.3 (2014-01-14 released)
 ================================================

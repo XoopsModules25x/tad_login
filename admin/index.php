@@ -9,27 +9,19 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @copyright           The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright           XOOPS Project (https://xoops.org)
  * @license             http://www.fsf.org/copyleft/gpl.html GNU public license
  * @package             tad_login
  * @since               1.0
  * @author              Tad
  * @version             $Id $
  **/
+require __DIR__ . '/header.php';
 
-require_once '../../../include/cp_header.php';
-include __DIR__ . '/header.php';
+$adminObject = \Xmf\Module\Admin::getInstance();
 
-include_once XOOPS_ROOT_PATH . "/modules/" . $xoopsModule->getVar("dirname") . "/class/admin.php";
+$adminObject->displayNavigation(basename(__FILE__));
+$adminObject->displayIndex();
 
-$index_admin = new ModuleAdmin();
-
-$index_admin->addConfigLabel(_AM_XDIR_CONFIG_CHECK);
-$index_admin->addLineConfigLabel(_AM_XDIR_CONFIG_PHP, $xoopsModule->getInfo("min_php"), 'php');
-$index_admin->addLineConfigLabel(_AM_XDIR_CONFIG_XOOPS, $xoopsModule->getInfo("min_xoops"), 'xoops');
-
-echo $index_admin->addNavigation('index.php');
-echo $index_admin->renderIndex();
-
-include __DIR__ . '/footer.php';
+require __DIR__ . '/footer.php';
 xoops_cp_footer();
