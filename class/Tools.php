@@ -7,29 +7,29 @@ use XoopsModules\Tadtools\Utility;
 class Tools
 {
     public static $all_oidc = [
-        'edu_oidc' => [
-            'tail' => 'edu',
+        'edu_oidc'  => [
+            'tail'        => 'edu',
             'provideruri' => 'https://oidc.tanet.edu.tw',
-            'eduinfoep' => 'https://oidc.tanet.edu.tw/moeresource/api/v1/oidc/eduinfo',
-            'scope' => ['openid', 'email', 'profile', 'openid2'],
-            'gzipenable' => true,
-            'from' => '',
+            'eduinfoep'   => 'https://oidc.tanet.edu.tw/moeresource/api/v1/oidc/eduinfo',
+            'scope'       => ['openid', 'email', 'profile', 'openid2'],
+            'gzipenable'  => true,
+            'from'        => '',
         ],
-        'moe_oidc' => [
-            'tail' => 'moe',
+        'moe_oidc'  => [
+            'tail'        => 'moe',
             'provideruri' => 'https://moe.sso.edu.tw',
-            'eduinfoep' => 'https://moe.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '',
+            'eduinfoep'   => 'https://moe.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '',
         ],
-        'kl_oidc' => [
-            'tail' => 'kl',
+        'kl_oidc'   => [
+            'tail'        => 'kl',
             'provideruri' => 'https://kl.sso.edu.tw',
-            'eduinfoep' => 'https://kl.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '基隆市',
+            'eduinfoep'   => 'https://kl.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '基隆市',
         ],
         // 'tp_oidc' => [
         //     'tail' => 'tp',
@@ -40,149 +40,149 @@ class Tools
         //     'from' => '臺北市',
         // ],
         'ntpc_oidc' => [
-            'tail' => 'ntpc',
+            'tail'        => 'ntpc',
             'provideruri' => 'https://ntpc.sso.edu.tw',
-            'eduinfoep' => 'https://ntpc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '新北市',
+            'eduinfoep'   => 'https://ntpc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '新北市',
         ],
-        'ty_oidc' => [
-            'tail' => 'ty',
+        'ty_oidc'   => [
+            'tail'        => 'ty',
             'provideruri' => 'https://tyc.sso.edu.tw',
-            'eduinfoep' => 'https://tyc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['openid', 'openid2', 'email', 'profile', 'eduinfo'],
-            'gzipenable' => false,
-            'from' => '桃園市',
+            'eduinfoep'   => 'https://tyc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['openid', 'openid2', 'email', 'profile', 'eduinfo'],
+            'gzipenable'  => false,
+            'from'        => '桃園市',
         ],
-        'hc_oidc' => [
-            'tail' => 'hc',
+        'hc_oidc'   => [
+            'tail'        => 'hc',
             'provideruri' => 'https://hc.sso.edu.tw',
-            'eduinfoep' => 'https://hc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '新竹市',
+            'eduinfoep'   => 'https://hc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '新竹市',
         ],
-        'hcc_oidc' => [
-            'tail' => 'hcc',
+        'hcc_oidc'  => [
+            'tail'        => 'hcc',
             'provideruri' => 'https://hcc.sso.edu.tw',
-            'eduinfoep' => 'https://hcc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '新竹縣',
+            'eduinfoep'   => 'https://hcc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '新竹縣',
         ],
-        'mlc_oidc' => [
-            'tail' => 'mlc',
+        'mlc_oidc'  => [
+            'tail'        => 'mlc',
             'provideruri' => 'https://mlc.sso.edu.tw',
-            'eduinfoep' => 'https://mlc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '苗栗縣',
+            'eduinfoep'   => 'https://mlc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '苗栗縣',
         ],
-        'tc_oidc' => [
-            'tail' => 'tc',
+        'tc_oidc'   => [
+            'tail'        => 'tc',
             'provideruri' => 'https://tc.sso.edu.tw',
-            'eduinfoep' => 'https://tc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '臺中市',
+            'eduinfoep'   => 'https://tc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '臺中市',
         ],
-        'chc_oidc' => [
-            'tail' => 'chc',
+        'chc_oidc'  => [
+            'tail'        => 'chc',
             'provideruri' => 'https://chc.sso.edu.tw',
-            'eduinfoep' => 'https://chc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '彰化縣',
+            'eduinfoep'   => 'https://chc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '彰化縣',
         ],
         'ntct_oidc' => [
-            'tail' => 'ntct',
+            'tail'        => 'ntct',
             'provideruri' => 'https://ntct.sso.edu.tw',
-            'eduinfoep' => 'https://ntct.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '南投縣',
+            'eduinfoep'   => 'https://ntct.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '南投縣',
         ],
-        'ylc_oidc' => [
-            'tail' => 'ylc',
+        'ylc_oidc'  => [
+            'tail'        => 'ylc',
             'provideruri' => 'https://ylc.sso.edu.tw',
-            'eduinfoep' => 'https://ylc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['openid', 'profile', 'eduinfo', 'email'],
-            'gzipenable' => false,
-            'from' => '雲林縣',
+            'eduinfoep'   => 'https://ylc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['openid', 'profile', 'eduinfo', 'email'],
+            'gzipenable'  => false,
+            'from'        => '雲林縣',
         ],
-        'cyc_oidc' => [
-            'tail' => 'cyc',
+        'cyc_oidc'  => [
+            'tail'        => 'cyc',
             'provideruri' => 'https://cyc.sso.edu.tw',
-            'eduinfoep' => 'https://cyc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '嘉義縣',
+            'eduinfoep'   => 'https://cyc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '嘉義縣',
         ],
-        // 'cy_oidc' => [
-        //     'tail' => 'cy',
-        //     'provideruri' => 'https://cy.sso.edu.tw',
-        //     'eduinfoep' => 'https://cy.sso.edu.tw/cncresource/api/v1/eduinfo',
-        //     'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-        //     'gzipenable' => false,
-        //     'from'=>'嘉義市',
-        // ],
-        'kh_oidc' => [
-            'tail' => 'kh',
-            'gzipenable' => false,
-            'scope' => ['openid', 'profile', 'email', 'kh_profile', 'kh_titles'],
-            'providerparams' => ['token_endpoint_auth_methods_supported' => ["client_secret_post"]],
+        'cy_oidc'   => [
+            'tail'        => 'cy',
+            'provideruri' => 'https://cy.sso.edu.tw',
+            'eduinfoep'   => 'https://cy.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '嘉義市',
+        ],
+        'kh_oidc'   => [
+            'tail'            => 'kh',
+            'gzipenable'      => false,
+            'scope'           => ['openid', 'profile', 'email', 'kh_profile', 'kh_titles'],
+            'providerparams'  => ['token_endpoint_auth_methods_supported' => ["client_secret_post"]],
             'ignore_userinfo' => true,
-            'provideruri' => 'https://oidc.kh.edu.tw',
-            'from' => '高雄市',
+            'provideruri'     => 'https://oidc.kh.edu.tw',
+            'from'            => '高雄市',
         ],
-        'ptc_oidc' => [
-            'tail' => 'ptc',
+        'ptc_oidc'  => [
+            'tail'        => 'ptc',
             'provideruri' => 'https://ptc.sso.edu.tw',
-            'eduinfoep' => 'https://ptc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '屏東縣',
+            'eduinfoep'   => 'https://ptc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '屏東縣',
         ],
-        'ilc_oidc' => [
-            'tail' => 'ilc',
+        'ilc_oidc'  => [
+            'tail'        => 'ilc',
             'provideruri' => 'https://ilc.sso.edu.tw',
-            'eduinfoep' => 'https://ilc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '宜蘭縣',
+            'eduinfoep'   => 'https://ilc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '宜蘭縣',
         ],
-        'hlc_oidc' => [
-            'tail' => 'hlc',
+        'hlc_oidc'  => [
+            'tail'        => 'hlc',
             'provideruri' => 'https://hlc.sso.edu.tw',
-            'eduinfoep' => 'https://hlc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '花蓮縣',
+            'eduinfoep'   => 'https://hlc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '花蓮縣',
         ],
         'ttct_oidc' => [
-            'tail' => 'ttct',
+            'tail'        => 'ttct',
             'provideruri' => 'https://ttct.sso.edu.tw',
-            'eduinfoep' => 'https://ttct.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '臺東縣',
+            'eduinfoep'   => 'https://ttct.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '臺東縣',
         ],
-        'phc_oidc' => [
-            'tail' => 'phc',
+        'phc_oidc'  => [
+            'tail'        => 'phc',
             'provideruri' => 'https://phc.sso.edu.tw',
-            'eduinfoep' => 'https://phc.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '澎湖縣',
+            'eduinfoep'   => 'https://phc.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '澎湖縣',
         ],
-        'mt_oidc' => [
-            'tail' => 'mt',
+        'mt_oidc'   => [
+            'tail'        => 'mt',
             'provideruri' => 'https://matsu.sso.edu.tw',
-            'eduinfoep' => 'https://matsu.sso.edu.tw/cncresource/api/v1/eduinfo',
-            'scope' => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
-            'gzipenable' => false,
-            'from' => '連江縣',
+            'eduinfoep'   => 'https://matsu.sso.edu.tw/cncresource/api/v1/eduinfo',
+            'scope'       => ['educloudroles', 'openid', 'profile', 'eduinfo', 'openid2', 'email'],
+            'gzipenable'  => false,
+            'from'        => '連江縣',
         ],
     ];
 
@@ -218,8 +218,8 @@ class Tools
         $header  = ["Authorization: Bearer $accesstoken"];
         $options = [
             'http' => [
-                'header' => $header,
-                'method' => 'GET',
+                'header'  => $header,
+                'method'  => 'GET',
                 'content' => '',
             ],
         ];
@@ -269,10 +269,10 @@ class Tools
             header('location:' . XOOPS_URL . '/user.php');
             exit;
         }
-        require_once XOOPS_ROOT_PATH . '/modules/tad_login/class/line/ConfigManager.php'; //Line 設定檔 管理器
+        require_once XOOPS_ROOT_PATH . '/modules/tad_login/class/line/ConfigManager.php';     //Line 設定檔 管理器
         require_once XOOPS_ROOT_PATH . '/modules/tad_login/class/line/LineAuthorization.php'; //產生登入網址
-        require_once XOOPS_ROOT_PATH . '/modules/tad_login/class/line/LineProfiles.php'; //取得用戶端 Profile
-        require_once XOOPS_ROOT_PATH . '/modules/tad_login/class/line/LineController.php'; //LINE控制
+        require_once XOOPS_ROOT_PATH . '/modules/tad_login/class/line/LineProfiles.php';      //取得用戶端 Profile
+        require_once XOOPS_ROOT_PATH . '/modules/tad_login/class/line/LineController.php';    //LINE控制
 
         if (!isset($xoopsModuleConfig['line_id'])) {
             $TadLoginModuleConfig = Utility::getXoopsModuleConfig('tad_login');
@@ -290,7 +290,7 @@ class Tools
         define("CLIENT_ID", $TadLoginModuleConfig['line_id']);
         define("CLIENT_SECRET", $TadLoginModuleConfig['line_secret']);
         define("REDIRECT_URI", XOOPS_URL . '/modules/tad_login/line_callback.php'); //登入後返回位置
-        define("SCOPE", 'openid%20profile%20email'); //授權範圍以%20分隔 可以有3項openid，profile，email
+        define("SCOPE", 'openid%20profile%20email');                                //授權範圍以%20分隔 可以有3項openid，profile，email
 
         $Line     = new \LineController();
         $loginUrl = $Line->lineLogin($state); //產生LINE登入連結
@@ -623,7 +623,7 @@ class Tools
         $string_length = strlen($string);
         $result        = '';
         $box           = range(0, 255);
-        $rndkey        = array();
+        $rndkey        = [];
         // 產生密匙簿
         for ($i = 0; $i <= 255; $i++) {
             $rndkey[$i] = ord($cryptkey[$i % $key_length]);
