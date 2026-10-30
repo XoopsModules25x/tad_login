@@ -237,7 +237,7 @@ class Tools
             $uname = $xoopsUser->uname();
         }
         if ($uname) {
-            $pass = self::authcode($newpass, 'ENCODE', $uname, 0);
+            $pass = self::encryptStoredPassword($newpass);
 
             $sql = 'UPDATE `' . $xoopsDB->prefix('users') . '` SET `pass` = MD5(' . $xoopsDB->quote($newpass) . ') WHERE `uname`=' . $xoopsDB->quote($uname);
             $xoopsDB->queryF($sql) or Utility::web_error($sql, __FILE__, __LINE__);
@@ -578,8 +578,8 @@ class Tools
                 $sql = 'INSERT INTO `' . $xoopsDB->prefix('groups_users_link') . '`  (groupid, uid) VALUES  (2, ' . $uid . ')';
                 $xoopsDB->queryF($sql) or Utility::web_error($sql, __FILE__, __LINE__);
 
-                $pass = self::authcode($pass, 'ENCODE', $uname);
-                $sql  = 'REPLACE INTO `' . $xoopsDB->prefix('tad_login_random_pass') . "` (`uname` , `random_pass`) VALUES ('{$uname}','{$pass}')";
+                $pass = self::encryptStoredPassword($pass);
+                $sql  = 'REPLACE INTO `' . $xoopsDB->prefix('tad_login_random_pass') . '` (`uname` , `random_pass`) VALUES (' . $xoopsDB->quote($uname) . ', ' . $xoopsDB->quote($pass) . ')';
                 $xoopsDB->queryF($sql) or Utility::web_error($sql, __FILE__, __LINE__);
 
                 self::login_xoops($uname, $name, $email, $SchoolCode, $JobName, $url, $from, $sig, $occ, $bio, $aim, $yim, $msnm);
@@ -613,16 +613,25 @@ class Tools
             $random_pass = Utility::randStr(128);
             // 重新產生隨機的綁定密碼
             $pass        = md5($random_pass);
-            $random_pass = self::authcode($random_pass, 'ENCODE', $uname);
+            $random_pass = self::encryptStoredPassword($random_pass);
 
             $sql = 'REPLACE INTO `' . $xoopsDB->prefix('tad_login_random_pass') . '` (`uname` , `random_pass`, `hashed_date`) values (' . $xoopsDB->quote($uname) . ', ' . $xoopsDB->quote($random_pass) . ", '0000-00-00 00:00:00')";
             $xoopsDB->queryF($sql) or Utility::web_error($sql, __FILE__, __LINE__);
 
             $sql = 'UPDATE `' . $xoopsDB->prefix('users') . '` SET `pass`=' . $xoopsDB->quote($pass) . ' WHERE `uname`=' . $xoopsDB->quote($uname);
             $xoopsDB->queryF($sql) or Utility::web_error($sql, __FILE__, __LINE__);
-        }
+        } elseif (0 === strpos($random_pass, 'v2:')) {
+            $random_pass = self::decryptStoredPassword($random_pass);
+        } else {
+            $random_pass = self::authcode($random_pass, 'DECODE', $uname);
+            if ('' === $random_pass) {
+                throw new \RuntimeException('Unable to decrypt a legacy tad_login password.');
+            }
 
-        $random_pass = self::authcode($random_pass, 'DECODE', $uname);
+            $encryptedPass = self::encryptStoredPassword($random_pass);
+            $sql = 'UPDATE `' . $xoopsDB->prefix('tad_login_random_pass') . '` SET `random_pass`=' . $xoopsDB->quote($encryptedPass) . ' WHERE `uname`=' . $xoopsDB->quote($uname);
+            $xoopsDB->queryF($sql) or Utility::web_error($sql, __FILE__, __LINE__);
+        }
 
         if ($pass !== md5($random_pass)) {
             $sql = 'UPDATE `' . $xoopsDB->prefix('users') . '` set `pass`=MD5(' . $xoopsDB->quote($random_pass) . ') WHERE `uname`=' . $xoopsDB->quote($uname);
@@ -631,6 +640,116 @@ class Tools
         }
 
         return $random_pass;
+    }
+
+    public static function encryptStoredPassword(string $plain): string
+    {
+        $cipher = 'aes-256-gcm';
+        if (!function_exists('openssl_encrypt') || !function_exists('openssl_cipher_iv_length')) {
+            throw new \RuntimeException('The OpenSSL extension is required to encrypt tad_login passwords.');
+        }
+
+        $ivLength = openssl_cipher_iv_length($cipher);
+        if (false === $ivLength) {
+            throw new \RuntimeException('AES-256-GCM is not available in OpenSSL.');
+        }
+
+        $iv = random_bytes($ivLength);
+        $tag = '';
+        $encrypted = openssl_encrypt($plain, $cipher, self::getStoredPasswordKey(), OPENSSL_RAW_DATA, $iv, $tag, 'tad_login_random_pass:v2');
+        if (false === $encrypted) {
+            throw new \RuntimeException('Unable to encrypt a tad_login password.');
+        }
+
+        return 'v2:' . base64_encode($iv . $tag . $encrypted);
+    }
+
+    private static function decryptStoredPassword(string $encrypted): string
+    {
+        $cipher = 'aes-256-gcm';
+        if (!function_exists('openssl_decrypt') || !function_exists('openssl_cipher_iv_length')) {
+            throw new \RuntimeException('The OpenSSL extension is required to decrypt tad_login passwords.');
+        }
+
+        $encoded = substr($encrypted, 3);
+        $payload = base64_decode($encoded, true);
+        $ivLength = openssl_cipher_iv_length($cipher);
+        if (false === $ivLength) {
+            throw new \RuntimeException('AES-256-GCM is not available in OpenSSL.');
+        }
+
+        $tagLength = 16;
+        if (false === $payload || strlen($payload) < $ivLength + $tagLength) {
+            throw new \RuntimeException('Invalid encrypted tad_login password data.');
+        }
+
+        $iv = substr($payload, 0, $ivLength);
+        $tag = substr($payload, $ivLength, $tagLength);
+        $ciphertext = substr($payload, $ivLength + $tagLength);
+        $plain = openssl_decrypt($ciphertext, $cipher, self::getStoredPasswordKey(), OPENSSL_RAW_DATA, $iv, $tag, 'tad_login_random_pass:v2');
+        if (false === $plain) {
+            throw new \RuntimeException('Unable to decrypt a tad_login password. Check the XOOPS private-data key file.');
+        }
+
+        return $plain;
+    }
+
+    private static function getStoredPasswordKey(): string
+    {
+        if (!defined('XOOPS_VAR_PATH')) {
+            throw new \RuntimeException('XOOPS_VAR_PATH is required to store the tad_login encryption key.');
+        }
+
+        $directory = XOOPS_VAR_PATH . '/tad_login';
+        if (!is_dir($directory) && !@mkdir($directory, 0700, true) && !is_dir($directory)) {
+            throw new \RuntimeException('Unable to create the tad_login private-data directory.');
+        }
+
+        $keyPath = $directory . '/random_pass.key';
+        $lock = @fopen($keyPath . '.lock', 'c+b');
+        if (false === $lock) {
+            throw new \RuntimeException('Unable to open the tad_login encryption key lock.');
+        }
+        if (!flock($lock, LOCK_EX)) {
+            fclose($lock);
+            throw new \RuntimeException('Unable to lock the tad_login encryption key file.');
+        }
+
+        try {
+            if (is_link($keyPath)) {
+                throw new \RuntimeException('The tad_login encryption key file must not be a symbolic link.');
+            }
+
+            if (!file_exists($keyPath)) {
+                $key = random_bytes(32);
+                $handle = @fopen($keyPath, 'x+b');
+                if (false === $handle) {
+                    throw new \RuntimeException('Unable to create the tad_login encryption key file.');
+                }
+
+                $written = fwrite($handle, $key);
+                $flushed = fflush($handle);
+                fclose($handle);
+                @chmod($keyPath, 0600);
+
+                if (32 !== $written || !$flushed) {
+                    @unlink($keyPath);
+                    throw new \RuntimeException('Unable to write the tad_login encryption key file.');
+                }
+
+                return $key;
+            }
+
+            $key = @file_get_contents($keyPath);
+            if (false === $key || 32 !== strlen($key)) {
+                throw new \RuntimeException('Invalid or unreadable tad_login encryption key file.');
+            }
+
+            return $key;
+        } finally {
+            flock($lock, LOCK_UN);
+            fclose($lock);
+        }
     }
 
     //非常給力的authcode加密函式,Discuz!經典程式碼(帶詳解)
