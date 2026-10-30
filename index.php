@@ -1149,8 +1149,15 @@ function tp_ldap_login()
 
     if (empty($oidc_setup['tp_ldap']['clientid'])) {
         redirect_header(XOOPS_URL, 3, "系統無法取得臺北市單一簽入 client id 值");
+        exit;
     }
-    header("location:https://ldap.tp.edu.tw/oauth/authorize?client_id={$oidc_setup['tp_ldap']['clientid']}&redirect_uri=" . XOOPS_URL . '/modules/tad_login/tp_callback.php&response_type=code&scope=user profile');
+    $authorize_url = 'https://ldap.tp.edu.tw/oauth/authorize?' . http_build_query([
+        'client_id'     => $oidc_setup['tp_ldap']['clientid'],
+        'redirect_uri'  => XOOPS_URL . '/modules/tad_login/tp_callback.php',
+        'response_type' => 'code',
+        'scope'         => 'user profile',
+    ], '', '&', PHP_QUERY_RFC3986);
+    header('location:' . $authorize_url);
     exit;
 }
 
