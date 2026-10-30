@@ -192,6 +192,44 @@ class Tools
         ],
     ];
 
+    public static function is_local_redirect($url)
+    {
+        if (!is_string($url) || '' === $url || preg_match('/[\x00-\x20\x7f\\\\]/', $url)) {
+            return false;
+        }
+
+        $target = parse_url($url);
+        $base = parse_url(XOOPS_URL);
+        if (false === $target || false === $base) {
+            return false;
+        }
+
+        if (!isset($target['scheme']) && !isset($target['host'])) {
+            return isset($target['path'])
+                && 0 === strpos($target['path'], '/')
+                && 0 !== strpos($target['path'], '//');
+        }
+
+        if (!isset($target['scheme'], $target['host'], $base['scheme'], $base['host'])
+            || isset($target['user'])
+            || isset($target['pass'])) {
+            return false;
+        }
+
+        $scheme = strtolower($target['scheme']);
+        if (!in_array($scheme, ['http', 'https'], true)
+            || $scheme !== strtolower($base['scheme'])
+            || strtolower($target['host']) !== strtolower($base['host'])) {
+            return false;
+        }
+
+        $targetPort = isset($target['port']) ? $target['port'] : ('https' === $scheme ? 443 : 80);
+        $baseScheme = strtolower($base['scheme']);
+        $basePort = isset($base['port']) ? $base['port'] : ('https' === $baseScheme ? 443 : 80);
+
+        return $targetPort === $basePort;
+    }
+
     public static function change_pass($newpass, $uname = '', $redirect_header = true)
     {
         global $xoopsUser, $xoopsDB;
@@ -201,10 +239,10 @@ class Tools
         if ($uname) {
             $pass = self::authcode($newpass, 'ENCODE', $uname, 0);
 
-            $sql = 'UPDATE `' . $xoopsDB->prefix('users') . "` SET `pass` = MD5('$newpass') WHERE `uname`='$uname' ";
+            $sql = 'UPDATE `' . $xoopsDB->prefix('users') . '` SET `pass` = MD5(' . $xoopsDB->quote($newpass) . ') WHERE `uname`=' . $xoopsDB->quote($uname);
             $xoopsDB->queryF($sql) or Utility::web_error($sql, __FILE__, __LINE__);
 
-            $sql = 'UPDATE `' . $xoopsDB->prefix('tad_login_random_pass') . "` SET `random_pass` = '$pass', `hashed_date`=NOW() WHERE `uname`='$uname' ";
+            $sql = 'UPDATE `' . $xoopsDB->prefix('tad_login_random_pass') . '` SET `random_pass` = ' . $xoopsDB->quote($pass) . ', `hashed_date`=NOW() WHERE `uname`=' . $xoopsDB->quote($uname);
             $xoopsDB->queryF($sql) or Utility::web_error($sql, __FILE__, __LINE__);
 
             if ($redirect_header) {
@@ -453,8 +491,7 @@ class Tools
                 }
 
                 // Utility::dd($_SESSION);
-                if (!$memberHandler->insertUser($user, true)) {
-                }
+                $memberHandler->insertUser($user, true);
 
                 // Regenrate a new session id and destroy old session
                 $GLOBALS['sess_handler']->regenerate_id(true);
@@ -464,13 +501,13 @@ class Tools
                     $redirect_url = $xoopsModuleConfig['redirect_url'];
                 } elseif ($xoopsModuleConfig['bind_openid'] == 1) {
                     $redirect_url = XOOPS_URL . '/modules/tad_login/index.php';
-                } elseif ($_SESSION['login_from']) {
+                } elseif (!empty($_SESSION['login_from']) && self::is_local_redirect($_SESSION['login_from'])) {
                     $redirect_url = $_SESSION['login_from'];
                 } else {
                     $redirect_url = XOOPS_URL . '/index.php';
                 }
 
-                if ($_SESSION['login_from']) {
+                if (!empty($_SESSION['login_from'])) {
                     unset($_SESSION['login_from']);
                 }
 
@@ -560,13 +597,13 @@ class Tools
         }
 
         // 取得XOOPS使用者密碼（加密過的）
-        $sql    = 'SELECT `pass` FROM `' . $xoopsDB->prefix('users') . "` WHERE `uname`='{$uname}'";
+        $sql    = 'SELECT `pass` FROM `' . $xoopsDB->prefix('users') . '` WHERE `uname`=' . $xoopsDB->quote($uname);
         $result = $xoopsDB->query($sql) or Utility::web_error($sql, __FILE__, __LINE__);
 
         list($pass) = $xoopsDB->fetchRow($result);
 
         // 取得綁定密碼
-        $sql    = 'SELECT `random_pass` FROM `' . $xoopsDB->prefix('tad_login_random_pass') . "` WHERE `uname`='{$uname}'";
+        $sql    = 'SELECT `random_pass` FROM `' . $xoopsDB->prefix('tad_login_random_pass') . '` WHERE `uname`=' . $xoopsDB->quote($uname);
         $result = $xoopsDB->query($sql) or Utility::web_error($sql, __FILE__, __LINE__);
 
         list($random_pass) = $xoopsDB->fetchRow($result);
@@ -578,17 +615,17 @@ class Tools
             $pass        = md5($random_pass);
             $random_pass = self::authcode($random_pass, 'ENCODE', $uname);
 
-            $sql = 'REPLACE INTO `' . $xoopsDB->prefix('tad_login_random_pass') . "` (`uname` , `random_pass`, `hashed_date`) values  ('{$uname}','{$random_pass}', '0000-00-00 00:00:00')";
+            $sql = 'REPLACE INTO `' . $xoopsDB->prefix('tad_login_random_pass') . '` (`uname` , `random_pass`, `hashed_date`) values (' . $xoopsDB->quote($uname) . ', ' . $xoopsDB->quote($random_pass) . ", '0000-00-00 00:00:00')";
             $xoopsDB->queryF($sql) or Utility::web_error($sql, __FILE__, __LINE__);
 
-            $sql = 'UPDATE `' . $xoopsDB->prefix('users') . "` SET `pass`='$pass' WHERE `uname`='{$uname}'";
+            $sql = 'UPDATE `' . $xoopsDB->prefix('users') . '` SET `pass`=' . $xoopsDB->quote($pass) . ' WHERE `uname`=' . $xoopsDB->quote($uname);
             $xoopsDB->queryF($sql) or Utility::web_error($sql, __FILE__, __LINE__);
         }
 
         $random_pass = self::authcode($random_pass, 'DECODE', $uname);
 
         if ($pass !== md5($random_pass)) {
-            $sql = 'UPDATE `' . $xoopsDB->prefix('users') . "` set `pass`=MD5('{$random_pass}') WHERE `uname`='{$uname}'";
+            $sql = 'UPDATE `' . $xoopsDB->prefix('users') . '` set `pass`=MD5(' . $xoopsDB->quote($random_pass) . ') WHERE `uname`=' . $xoopsDB->quote($uname);
             $xoopsDB->queryF($sql) or Utility::web_error($sql, __FILE__, __LINE__);
 
         }

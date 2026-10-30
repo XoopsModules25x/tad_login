@@ -29,7 +29,6 @@ function login($uname = '', $pass = '')
             return $msg['error'] = _MD_TNOPENID_INCORRECTLOGIN;
         }
 
-        $memberHandler = xoops_getHandler('member');
         xoops_loadLanguage('auth');
 
         require_once $GLOBALS['xoops']->path('class/auth/authfactory.php');
@@ -62,8 +61,7 @@ function login($uname = '', $pass = '')
             //設定最後登入時間
             $user->setVar('last_login', time());
 
-            if (!$memberHandler->insertUser($user, true)) {
-            }
+            $memberHandler->insertUser($user, true);
 
             $login_user['uname'] = $user->uname();
             $login_user['name'] = $user->name();

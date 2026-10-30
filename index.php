@@ -22,9 +22,15 @@ $newpass = Request::getString('newpass');
 
 $oidc_array = array_keys(Tools::$all_oidc);
 
-if (isset($link_to) and !empty($link_to)) {
-    $_SESSION['login_from'] = $link_to;
-} elseif (!isset($_SESSION['login_from'])) {
+if (isset($_SESSION['login_from']) && !Tools::is_local_redirect($_SESSION['login_from'])) {
+    unset($_SESSION['login_from']);
+}
+if (!empty($link_to)) {
+    if (Tools::is_local_redirect($link_to)) {
+        $_SESSION['login_from'] = $link_to;
+    }
+} elseif (!isset($_SESSION['login_from']) && !empty($_SERVER['HTTP_REFERER'])
+    && Tools::is_local_redirect($_SERVER['HTTP_REFERER'])) {
     $_SESSION['login_from'] = $_SERVER['HTTP_REFERER'];
 }
 
